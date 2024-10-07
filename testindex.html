@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入頁面</title>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 360px;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #f8f9fa;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .link {
+            display: block;
+            margin-top: 15px;
+            text-decoration: none;
+            font-size: 14px;
+            color: #007bff;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2>登入</h2>
+        <input type="text" id="username" placeholder="用戶名" />
+        <input type="password" id="password" placeholder="密碼" />
+        <button onclick="login()">登入</button>
+        <a class="link" href="javascript:void(0)" onclick="redirectToRegister()">沒有帳號？點擊註冊</a>
+    </div>
+
+    <script>
+        async function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    try {
+        const response = await fetch('http://localhost:8080/getuser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password }) // 將使用者名稱和密碼作為 JSON 傳遞
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP 錯誤！狀態碼：${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("登入成功:", data);
+
+        // 跳轉到圖書館首頁或處理登入成功的邏輯
+        window.location.href = "/test/library-homepage.html";
+    } catch (error) {
+        console.error('錯誤:', error);
+        alert("登入失敗，請重試。");
+    }
+}
+
+        
+        function redirectToRegister() {
+            window.location.href = "/test/register.html";
+        }
+    </script>
+</body>
+</html>

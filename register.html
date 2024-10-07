@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>註冊頁面</title>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 360px;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background-color: #f8f9fa;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            color: #fff;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .link {
+            display: block;
+            margin-top: 15px;
+            text-decoration: none;
+            font-size: 14px;
+            color: #007bff;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2>註冊</h2>
+        <input type="text" id="reg-username" placeholder="用戶名" />
+        <input type="password" id="reg-password" placeholder="密碼" />
+        <button onclick="register()">註冊</button>
+        <a class="link" href="/test/testindex.html">已有帳號？返回登入頁面</a>
+    </div>
+
+    <script>
+        async function register() {
+            const username = document.getElementById('reg-username').value;
+            const password = document.getElementById('reg-password').value;
+            
+            try {
+                const response = await fetch('http://localhost:8080/user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP 錯誤！狀態碼：${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log("註冊成功:", data);
+
+                alert("註冊成功！您現在可以登入了。");
+                window.location.href = "/test/testindex.html"; // 跳轉至登入頁面
+            } catch (error) {
+                console.error('錯誤:', error);
+                alert("註冊失敗，請重試。");
+            }
+        }
+    </script>
+</body>
+</html>
